@@ -27,15 +27,25 @@ window.PLAYLIST = {
       srt: 'jtm.srt'
     },
     {
-      titre: 'Bella',
-      mp3: 'bella.mp3',
-      srt: 'bella.srt'
+      titre: 'TUDO BEM',
+      mp3: 'tudo bem.mp3',
+      srt: 'tudo bem.srt'
     },
     {
-      titre: 'Troisième titre',
-      mp3: '03 - Troisième titre.mp3',
-      srt: '03 - Troisième titre.lrc'
+      titre: 'GTA',
+      mp3: 'gta.mp3',
+      srt: 'gta.lrc'
     }
+    {
+      titre: 'BELLA',
+      mp3: 'bella.mp3',
+      srt: 'bella.lrc'
+    },
+    {
+      titre: 'CHANEL',
+      mp3: 'chanel.mp3',
+      srt: 'chanel.lrc'
+    },
     // copie un bloc { ... }, sépare-les par une virgule
   ]
 };

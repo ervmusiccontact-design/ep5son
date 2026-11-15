@@ -23,7 +23,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #bg::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18)}
 
 /* Mise en page */
-#app{position:relative;height:100%;display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:6vw;align-items:center;padding:40px 6vw}
+#app{position:relative;height:100%;display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:6vw;align-items:center;padding:40px 6vw}
 #left{display:flex;flex-direction:column;gap:18px;width:100%;max-width:380px;justify-self:end}
 #cover{width:100%;aspect-ratio:1;border-radius:10px;background:var(--glass) center/cover;box-shadow:0 20px 60px rgba(0,0,0,.45);transition:transform .4s}
 body.paused #cover{transform:scale(.92)}
@@ -55,8 +55,8 @@ input[type=range]::-moz-range-thumb{width:0;height:0;border:0}
 #vol svg{width:16px;height:16px;fill:currentColor;flex:none}
 
 /* Paroles */
-#right{height:100%;position:relative;min-width:0}
-#lyrics{height:100%;overflow-y:auto;scrollbar-width:none;padding:42vh 0;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+#right{height:100%;position:relative;min-width:0;min-height:0}
+#lyrics{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding:42vh 0;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
 #lyrics::-webkit-scrollbar{display:none}
 .l{font-size:clamp(24px,3.2vw,38px);font-weight:700;line-height:1.2;padding:12px 16px;margin:0 -16px;border-radius:12px;color:#fff;opacity:.35;filter:blur(var(--b,0px));transition:opacity .4s,filter .4s,transform .4s;transform-origin:left center;cursor:pointer;max-width:620px}
 .l:hover{background:var(--glass);filter:none;opacity:.7}
@@ -86,7 +86,7 @@ input[type=range]::-moz-range-thumb{width:0;height:0;border:0}
 /* Mobile */
 @media (max-width:820px){
   body{overflow:auto}
-  #app{grid-template-columns:1fr;gap:20px;padding:56px 22px 90px;height:auto;min-height:100%;align-items:start}
+  #app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;gap:20px;padding:56px 22px 90px;height:auto;min-height:100%;align-items:start}
   #left{justify-self:center}
   #cover{max-width:300px;margin:0 auto}
   #right{height:70vh}

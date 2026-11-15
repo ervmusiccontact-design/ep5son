@@ -54,18 +54,29 @@
   });
 
   /* ---------- Paroles : SRT / VTT / LRC ---------- */
+  // On repère chaque ligne d'horaire "00:00:10,269 --> 00:00:11,949" ; le texte d'une réplique
+  // est tout ce qui se trouve jusqu'à l'horaire suivant (les lignes vides ne sont pas nécessaires).
   function parseSrt(txt) {
+    txt = txt.replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '');
+    var re = /(?:(\d+):)?(\d+):(\d+)(?:[,.](\d+))?[ \t]*-->[ \t]*(?:\d+:)?\d+:\d+(?:[,.]\d+)?(?:[ \t]+[A-Za-z]+:\S+)*/g;
+    var cues = [], m;
+    while ((m = re.exec(txt))) cues.push({ m: m, start: m.index, end: re.lastIndex });
     var out = [];
-    txt.replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '').split(/\n\s*\n/).forEach(function (bl) {
-      var rows = bl.split('\n');
-      var k = -1, m = null;
-      for (var i = 0; i < rows.length; i++) {
-        m = rows[i].match(/(?:(\d+):)?(\d+):(\d+)(?:[,.](\d+))?\s*-->/);
-        if (m) { k = i; break; }
+    cues.forEach(function (c, i) {
+      var last = i + 1 >= cues.length;
+      var seg = txt.slice(c.end, last ? txt.length : cues[i + 1].start);
+      if (!last) {
+        // retire le numéro de la réplique suivante (sur sa propre ligne)
+        var cut = seg.replace(/\n[ \t]*\d+[ \t]*\n?[ \t]*$/, '');
+        if (cut === seg && seg.trim().indexOf('\n') < 0) {
+          // fichier sur une seule ligne : numéro collé en fin de texte
+          var mm = seg.match(/\s(\d+)\s*$/);
+          if (mm && +mm[1] === i + 2) cut = seg.slice(0, mm.index);
+        }
+        seg = cut;
       }
-      if (k < 0) return;
-      var t = (+m[1] || 0) * 3600 + +m[2] * 60 + +m[3] + (m[4] ? +('0.' + m[4]) : 0);
-      var tx = rows.slice(k + 1).join(' ').replace(/<[^>]+>/g, '').replace(/\{[^}]*\}/g, '').replace(/\s+/g, ' ').trim();
+      var t = (+c.m[1] || 0) * 3600 + +c.m[2] * 60 + +c.m[3] + (c.m[4] ? +('0.' + c.m[4]) : 0);
+      var tx = seg.replace(/<[^>]+>/g, '').replace(/\{[^}]*\}/g, '').replace(/\s+/g, ' ').trim();
       if (tx) out.push({ t: t, text: tx });
     });
     return out.sort(function (x, y) { return x.t - y.t; });
